@@ -72,15 +72,16 @@ They connect to localhost on port 8080.
 While building the jar, the junit and integration tests are automatically run.
 
 ## How you would expand this solution, given a longer development period?
-I would store the API_KEY of google maps in a properties file.
-I would store the shops in a database, ensuring that the updating and concurrency requirements are met.
+-I would store the API_KEY of google maps in a properties file.
+-I would handle the possible errors better.
+-I would store the shops in a database, ensuring that the updating and concurrency requirements are met.
 
 ## How would you go about testing this solution?
 At the moment I have writing some postman tests.
 Anyway, I think that the best approach to testing this project would be to write behavioural test using, for instance, Cucumber.
 
 ## How would you integrate this solution into an existing collection of solutions used by the Retail Manager?
-
+It would depend on how the existing solutions had been implemented.
 
 ## How would you go about deploying this solution to production systems?
 I would run the application inside docker containers.

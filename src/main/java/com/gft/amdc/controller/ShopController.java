@@ -44,7 +44,7 @@ public class ShopController {
      * @param shop
      * @return
      */
-    @RequestMapping(method = RequestMethod.PUT, value = "/shop")
+    @RequestMapping(method = RequestMethod.POST, value = "/shop")
     public HttpEntity<PutShopResponse> shop(@RequestBody Shop shop) {
 
         //Return error if the postcode is null

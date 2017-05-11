@@ -1,7 +1,10 @@
-package com.gft.amdc.jbehave.addShop;
+package com.gft.amdc.jbehave.addShopTwice;
 
 import com.jayway.restassured.RestAssured;
+import com.jayway.restassured.http.ContentType;
 import com.jayway.restassured.response.Response;
+import com.jayway.restassured.response.ValidatableResponse;
+import org.hamcrest.Matchers;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
@@ -12,6 +15,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.fail;
 
 /**
@@ -23,6 +27,7 @@ public class AddShopTwiceSteps {
         RestAssured.port = Integer.valueOf(port);
     }
 
+    final static String SHOP_NAME = "testName";
     final static String SHOP_POST_CODE_1 = "NG2 1RT";
     final static String SHOP_POST_CODE_2 = "NG2 5JD";
 
@@ -41,7 +46,7 @@ public class AddShopTwiceSteps {
 
         payLoad1 =
                 "{" +
-                        "\"shopName\": \"name\"," +
+                        "\"shopName\": \"" + SHOP_NAME + "\"," +
                         "\"shopAddress\": {" +
                         "\"number\": \"" + SHOP_NUMBER_1 + "\"," +
                         "\"postCode\": \"" + SHOP_POST_CODE_1 + "\"" +
@@ -49,7 +54,7 @@ public class AddShopTwiceSteps {
                         "}";
 
         payLoad2 = "{" +
-                "\"shopName\": \"name\"," +
+                "\"shopName\": \"" + SHOP_NAME + "\"," +
                 "\"shopAddress\": {" +
                 "\"number\": \"" + SHOP_NUMBER_2 + "\"," +
                 "\"postCode\": \"" + SHOP_POST_CODE_2 + "\"" +
@@ -90,30 +95,28 @@ public class AddShopTwiceSteps {
     @Then("one shop is added then it is updated")
     public void oneShopAddedThenUpdated() {
 
-        Response createdResponse;
-        Response updatedResponse;
+        //TODO: Remove the comments
+        //ValidatableResponse createdResponse;
+        //ValidatableResponse updatedResponse;
 
         if (response1.statusCode() == 201) {
-            createdResponse = response1;
+            //createdResponse = response1.then();
             assert (response2.statusCode() == 200);
-            updatedResponse = response2;
+            //updatedResponse = response2.then();
         } else if (response2.statusCode() == 201) {
-            createdResponse = response2;
+            //createdResponse = response2.then();
             assert (response1.statusCode() == 200);
-            updatedResponse = response1;
+            //updatedResponse = response1.then();
         } else {
             fail("Wrong response status");
             return;
         }
 
+        //The response to create has an empty body
+        //createdResponse.contentType(ContentType.JSON).body("isEmpty()", Matchers.is(true));
 
-        //Only the updatedResponse must have body
-        assert (createdResponse.body().asString().isEmpty());
-
-
-        //TODO: Write the correct assertions
-        String updatedBody = updatedResponse.body().asString();
-        assert (!updatedBody.isEmpty());
-
+        //The shop name in the response that updated is correct
+        //updatedResponse.contentType(ContentType.JSON).body("shopName", is(SHOP_NAME));
     }
+
 }

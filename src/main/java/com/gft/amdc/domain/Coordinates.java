@@ -1,20 +1,19 @@
 package com.gft.amdc.domain;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.hateoas.ResourceSupport;
-
-public class Coordinates extends ResourceSupport {
+public class Coordinates {
 
     private double longitude;
     private double latitude;
 
-    @JsonCreator
-    public Coordinates(@JsonProperty("longitude") double longitude,
-                       @JsonProperty("latitude") double latitude) {
+    public Coordinates () {
         super();
-        this.longitude = longitude;
+    }
+
+    public Coordinates(double latitude,
+                       double longitude) {
+        this();
         this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public double getLongitude() {

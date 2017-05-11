@@ -1,6 +1,7 @@
 ## Directories ##
 /.gradle/
 /build/
+/target/
 /.idea/
 
 ## Classes ##

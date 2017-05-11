@@ -7,16 +7,26 @@ import com.google.maps.GeocodingApi;
 import com.google.maps.GeocodingApiRequest;
 import com.google.maps.PendingResult;
 import com.google.maps.model.GeocodingResult;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.CompletableFuture;
+
 @Component
-public class GoogleMapsClient {
+public class GoogleMapsClient implements MapsClient {
 
-    private static final String API_KEY = "AIzaSyAZ-BgMm5DPgalGugyVcsg0F30oFwC-K7w";
+    //TODO: check if it works
+    @Value("${googleMaps.apyKey}")
+    //private static final String API_KEY = "AIzaSyAZ-BgMm5DPgalGugyVcsg0F30oFwC-K7w";
+    private String API_KEY;
 
-    public void obtainCoordinates(Shop shop) {
+    public CompletableFuture<Coordinates> obtainCoordinates(Shop shop) {
 
         GeoApiContext context = new GeoApiContext().setApiKey(API_KEY);
+
+
+        CompletableFuture<Coordinates> coordinatesCompletableFuture = new CompletableFuture<Coordinates>();
+
         GeocodingApiRequest req = GeocodingApi.geocode(context, shop.getShopAddress().getPostCode());
 
         // Asynchronous call.
@@ -27,7 +37,7 @@ public class GoogleMapsClient {
             public void onResult(GeocodingResult[] results) {
                 //TODO: In a future version, the case where the data received does not contain the longitude and latitude should be treated
                 if (results != null && results.length > 0 && results[0].geometry != null && results[0].geometry.location != null) {
-                    shop.getShopAddress().setCoordinates(new Coordinates(results[0].geometry.location.lng, results[0].geometry.location.lat));
+                    coordinatesCompletableFuture.complete(new Coordinates(results[0].geometry.location.lat, results[0].geometry.location.lng));
                 }
             }
 
@@ -38,5 +48,6 @@ public class GoogleMapsClient {
             }
         });
 
+        return coordinatesCompletableFuture;
     }
 }

@@ -1,20 +1,24 @@
 package com.gft.amdc.domain;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.hateoas.ResourceSupport;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class Shop extends ResourceSupport {
+import javax.validation.constraints.NotNull;
+import java.time.Instant;
 
+public class Shop {
+
+    @NotNull
     private String shopName;
+
+    @NotNull
     private ShopAddress shopAddress;
 
-    @JsonCreator
-    public Shop(@JsonProperty("shopName") String shopName,
-                @JsonProperty("shopAddress") ShopAddress shopAddress) {
+    @JsonIgnore
+    private Instant timeStamp;
+
+    public Shop() {
         super();
-        this.shopName = shopName;
-        this.shopAddress = shopAddress;
+        timeStamp = Instant.now();
     }
 
     public String getShopName() {
@@ -33,10 +37,5 @@ public class Shop extends ResourceSupport {
         this.shopAddress = shopAddress;
     }
 
-    public Double distance(Coordinates coordinates) {
-
-        return shopAddress.distance(coordinates);
-
-    }
-
+    public Instant getTimeStamp() { return timeStamp; }
 }

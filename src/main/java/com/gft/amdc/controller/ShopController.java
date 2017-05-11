@@ -1,17 +1,19 @@
 package com.gft.amdc.controller;
 
 import com.gft.amdc.domain.Coordinates;
-import com.gft.amdc.domain.PutShopResponse;
 import com.gft.amdc.domain.Shop;
+import com.gft.amdc.domain.resource.ShopResource;
 import com.gft.amdc.service.ShopService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+import javax.validation.Valid;
+import java.net.URI;
 
 @RestController
 public class ShopController {
@@ -25,61 +27,63 @@ public class ShopController {
      * @param name The name of the shop to retrieve
      * @return
      */
-    @RequestMapping(method = RequestMethod.GET, value = "/shop")
-    public HttpEntity<Shop> shop(
-            @RequestParam(value = "name", required = true) String name) {
+    @RequestMapping(method = RequestMethod.GET, value = "/shops/{name}")
+    public HttpEntity<ShopResource> shop(
+            @PathVariable(value = "name", required = true) String name) {
 
         Shop shop = shopService.retrieve(name);
 
         if (shop == null)
-            return new ResponseEntity<Shop>((Shop) null, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<ShopResource>((ShopResource) null, HttpStatus.NOT_FOUND);
 
-        shop.add(linkTo(methodOn(ShopController.class).shop(shop.getShopName())).withSelfRel());
-        return new ResponseEntity<Shop>(shop, HttpStatus.OK);
+        ShopResource shopResource = new ShopResource(shop);
+        return new ResponseEntity<ShopResource>(shopResource, HttpStatus.OK);
     }
 
     /**
      * Operation to add a new shop
+     * The shop is
      *
      * @param shop
      * @return
      */
-    @RequestMapping(method = RequestMethod.POST, value = "/shop")
-    public HttpEntity<PutShopResponse> shop(@RequestBody Shop shop) {
-
-        //Return error if the postcode is null
-        if (shop.getShopAddress() == null || shop.getShopAddress().getPostCode() == null)
-            return new ResponseEntity<PutShopResponse>((PutShopResponse)null, HttpStatus.BAD_REQUEST);
+    @RequestMapping(method = RequestMethod.POST, value = "/shops")
+    public HttpEntity<ShopResource> shop(@Valid @RequestBody Shop shop) {
 
         Shop oldShop = shopService.create(shop);
 
-        //Remove the links of the old shop
-        if (oldShop != null)
-            oldShop.removeLinks();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(URI.create(new ShopResource(shop).getLink(Link.REL_SELF).getHref()));
 
-        shop.add(linkTo(methodOn(ShopController.class).shop(shop.getShopName())).withSelfRel());
+        if (oldShop == null) {
+            return new ResponseEntity<ShopResource>(headers, HttpStatus.CREATED);
+        } else {
+            ShopResource oldShopResource = new ShopResource(oldShop);
+            return new ResponseEntity<ShopResource>(oldShopResource, headers, HttpStatus.OK);
+        }
 
-        PutShopResponse response = new PutShopResponse(shop, oldShop);
-
-        return new ResponseEntity<PutShopResponse>(response, HttpStatus.OK);
     }
 
     /**
      * This operation finds the nearest shop for given longitude and latitude
+     *
      * @param longitude
      * @param latitude
      * @return
      */
-    @RequestMapping(method = RequestMethod.GET, value = "/nearestShop")
-    public HttpEntity<Shop> shop(@RequestParam(value = "longitude", required = true) Double longitude,
-                                 @RequestParam(value = "latitude", required = true) Double latitude) {
+    @RequestMapping(method = RequestMethod.GET, value = "/shops/nearestShop")
+    public HttpEntity<ShopResource> shop(
+            @RequestParam(value = "latitude", required = true) Double latitude,
+            @RequestParam(value = "longitude", required = true) Double longitude) {
 
-        Shop nearestShop = shopService.getNearestShop(new Coordinates(longitude, latitude));
+        Shop nearestShop = shopService.getNearestShop(new Coordinates(latitude, longitude));
 
         if (nearestShop == null)
-            return new ResponseEntity<Shop>((Shop) null, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<ShopResource>((ShopResource) null, HttpStatus.NOT_FOUND);
 
-        nearestShop.add(linkTo(methodOn(ShopController.class).shop(nearestShop.getShopName())).withSelfRel());
-        return new ResponseEntity<Shop>(nearestShop, HttpStatus.OK);
+        ShopResource nearestShopResource = new ShopResource(nearestShop);
+        return new ResponseEntity<ShopResource>(nearestShopResource, HttpStatus.OK);
     }
+
+
 }

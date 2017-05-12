@@ -37,5 +37,7 @@ public class Shop {
         this.shopAddress = shopAddress;
     }
 
-    public Instant getTimeStamp() { return timeStamp; }
+    public Instant getTimeStamp() {
+        return timeStamp;
+    }
 }

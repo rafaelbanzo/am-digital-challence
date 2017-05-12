@@ -6,8 +6,8 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by RLBO on 20/04/2017.
@@ -36,7 +36,7 @@ public class ShopConcurrentHashMap implements ShopRepository {
         return shopsMap.values();
     }
 
-    public Shop update (Shop shop){
+    public Shop update(Shop shop) {
         Shop savedShop = retrieve(shop.getShopName());
         if (shop.getTimeStamp().equals(savedShop.getTimeStamp())) {
             return shopsMap.replace(shop.getShopName(), shop);

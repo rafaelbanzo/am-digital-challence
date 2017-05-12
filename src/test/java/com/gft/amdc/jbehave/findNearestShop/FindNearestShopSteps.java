@@ -1,15 +1,12 @@
 package com.gft.amdc.jbehave.findNearestShop;
 
-import com.jayway.jsonpath.JsonPath;
 import com.jayway.restassured.RestAssured;
-import com.jayway.restassured.response.Response;
 import com.jayway.restassured.response.ValidatableResponse;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Named;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.jbehave.core.model.ExamplesTable;
-import org.junit.BeforeClass;
 
 import java.util.Map;
 
@@ -51,7 +48,7 @@ public class FindNearestShopSteps {
     @When("a customer looks for the nearest shop to latitude $latitude longitude $longitude")
     public void aCustomerLooksForTheNearestShop(@Named("latitude") String latitude,
                                                 @Named("longitude") String longitude) {
-        nearestShop.set(RestAssured.get("shops/nearestShop?latitude="+latitude+"&longitude="+longitude).then());
+        nearestShop.set(RestAssured.get("shops/nearestShop?latitude=" + latitude + "&longitude=" + longitude).then());
     }
 
     @Then("the shop $shopName is returned")

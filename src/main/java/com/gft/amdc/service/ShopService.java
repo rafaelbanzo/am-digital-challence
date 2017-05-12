@@ -25,7 +25,7 @@ public class ShopService {
 
     public Shop create(Shop shop) {
 
-        obtainCoordinates (shop);
+        obtainCoordinates(shop);
 
         return shops.create(shop);
 

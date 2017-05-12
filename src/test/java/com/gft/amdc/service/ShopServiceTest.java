@@ -1,6 +1,5 @@
 package com.gft.amdc.service;
 
-import com.gft.amdc.Application;
 import com.gft.amdc.domain.Coordinates;
 import com.gft.amdc.domain.Shop;
 import com.gft.amdc.domain.ShopAddress;
@@ -11,11 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import java.util.Arrays;
 

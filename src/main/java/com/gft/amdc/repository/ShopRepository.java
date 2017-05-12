@@ -15,5 +15,5 @@ public interface ShopRepository {
 
     public Collection<Shop> findAll();
 
-    public Shop update (Shop shop);
+    public Shop update(Shop shop);
 }

@@ -5,7 +5,7 @@ public class Coordinates {
     private double longitude;
     private double latitude;
 
-    public Coordinates () {
+    public Coordinates() {
         super();
     }
 

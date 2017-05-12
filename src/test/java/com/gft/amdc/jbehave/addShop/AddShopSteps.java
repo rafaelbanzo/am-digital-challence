@@ -53,14 +53,12 @@ public class AddShopSteps {
     @Then("the shop can be obtained with the location link and the postCode is <postCode>")
     public void theShopCanBeObtainedWithTheLocationLink(@Named("postCode") String postCode) {
 
-
         String location = response.header("Location");
         assert (location != null);
 
         //Getting the shop with the link
         ValidatableResponse response = RestAssured.get(location).then();
         response.body("shopAddress.postCode", is(postCode));
-
 
     }
 }

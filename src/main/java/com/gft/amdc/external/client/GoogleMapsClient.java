@@ -1,5 +1,6 @@
 package com.gft.amdc.external.client;
 
+import com.gft.amdc.controller.GlobalExceptionHandler;
 import com.gft.amdc.domain.Coordinates;
 import com.gft.amdc.domain.Shop;
 import com.google.maps.GeoApiContext;
@@ -11,19 +12,20 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 @Component
 public class GoogleMapsClient implements MapsClient {
 
-    //TODO: check if it works
     @Value("${googleMaps.apyKey}")
-    //private static final String API_KEY = "AIzaSyAZ-BgMm5DPgalGugyVcsg0F30oFwC-K7w";
     private String API_KEY;
+
+    private static Logger logger = Logger.getLogger(GlobalExceptionHandler.class.getName());
 
     public CompletableFuture<Coordinates> obtainCoordinates(Shop shop) {
 
         GeoApiContext context = new GeoApiContext().setApiKey(API_KEY);
-
 
         CompletableFuture<Coordinates> coordinatesCompletableFuture = new CompletableFuture<Coordinates>();
 
@@ -44,7 +46,7 @@ public class GoogleMapsClient implements MapsClient {
             @Override
             public void onFailure(Throwable e) {
                 //TODO: In a future version, the error should be treated
-                e.printStackTrace();
+                logger.log(Level.WARNING, e.getMessage(), e);
             }
         });
 

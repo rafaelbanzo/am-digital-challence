@@ -39,7 +39,6 @@ public class AddShopTwiceSteps {
 
     Response response1;
     Response response2;
-    //String nearestShop;
 
     @Given("two shops with the same name")
     public void twoShops() {
@@ -95,28 +94,17 @@ public class AddShopTwiceSteps {
     @Then("one shop is added then it is updated")
     public void oneShopAddedThenUpdated() {
 
-        //TODO: Remove the comments
-        //ValidatableResponse createdResponse;
-        //ValidatableResponse updatedResponse;
-
         if (response1.statusCode() == 201) {
-            //createdResponse = response1.then();
             assert (response2.statusCode() == 200);
-            //updatedResponse = response2.then();
         } else if (response2.statusCode() == 201) {
-            //createdResponse = response2.then();
             assert (response1.statusCode() == 200);
-            //updatedResponse = response1.then();
         } else {
             fail("Wrong response status");
             return;
         }
 
-        //The response to create has an empty body
-        //createdResponse.contentType(ContentType.JSON).body("isEmpty()", Matchers.is(true));
+        //TODO: Validate that the updated shop is correct
 
-        //The shop name in the response that updated is correct
-        //updatedResponse.contentType(ContentType.JSON).body("shopName", is(SHOP_NAME));
     }
 
 }
